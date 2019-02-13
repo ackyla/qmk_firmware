@@ -31,8 +31,6 @@ int music_offset = 7;
 uint8_t music_mode = MUSIC_MODE_CHROMATIC;
 
 // music sequencer
-static bool music_sequence_recording = false;
-static bool music_sequence_recorded = false;
 static bool music_sequence_playing = false;
 static uint8_t music_sequence[16] = {0};
 static uint8_t music_sequence_count = 0;
@@ -116,117 +114,6 @@ void music_all_notes_off(void) {
 }
 
 bool process_music(uint16_t keycode, keyrecord_t *record) {
-
-    if (keycode == MU_ON && record->event.pressed) {
-        music_on();
-        return false;
-    }    
-
-    if (keycode == MU_OFF && record->event.pressed) {
-        music_off();
-        return false;
-    }
-
-    if (keycode == MU_TOG && record->event.pressed) {
-        if (music_activated) {
-            music_off();
-        } else {
-            music_on();
-        }
-        return false;
-    }
-
-    if (keycode == MI_ON && record->event.pressed) {
-        midi_on();
-        return false;
-    }    
-
-    if (keycode == MI_OFF && record->event.pressed) {
-        midi_off();
-        return false;
-    }
-
-    if (keycode == MI_TOG && record->event.pressed) {
-        if (midi_activated) {
-            midi_off();
-        } else {
-            midi_on();
-        }
-        return false;
-    }
-
-    if (keycode == MU_MOD && record->event.pressed) {
-      music_mode_cycle();
-      return false;
-    }
-
-    if (music_activated || midi_activated) {
-      if (record->event.pressed) {
-        if (keycode == KC_LCTL) { // Start recording
-          music_all_notes_off();
-          music_sequence_recording = true;
-          music_sequence_recorded = false;
-          music_sequence_playing = false;
-          music_sequence_count = 0;
-          return false;
-        }
-
-        if (keycode == KC_LALT) { // Stop recording/playing
-          music_all_notes_off();
-          if (music_sequence_recording) { // was recording
-            music_sequence_recorded = true;
-          }
-          music_sequence_recording = false;
-          music_sequence_playing = false;
-          return false;
-        }
-
-        if (keycode == KC_LGUI && music_sequence_recorded) { // Start playing
-          music_all_notes_off();
-          music_sequence_recording = false;
-          music_sequence_playing = true;
-          music_sequence_position = 0;
-          music_sequence_timer = 0;
-          return false;
-        }
-
-        if (keycode == KC_UP) {
-          music_sequence_interval-=10;
-          return false;
-        }
-
-        if (keycode == KC_DOWN) {
-          music_sequence_interval+=10;
-          return false;
-        }
-      }
-
-      uint8_t note;
-      if (music_mode == MUSIC_MODE_CHROMATIC) 
-        note = (music_starting_note + record->event.key.col + music_offset - 3)+12*(MATRIX_ROWS - record->event.key.row);
-      else if (music_mode == MUSIC_MODE_GUITAR)
-        note = (music_starting_note + record->event.key.col + music_offset + 32)+5*(MATRIX_ROWS - record->event.key.row);
-      else if (music_mode == MUSIC_MODE_VIOLIN)
-        note = (music_starting_note + record->event.key.col + music_offset + 32)+7*(MATRIX_ROWS - record->event.key.row);
-      else if (music_mode == MUSIC_MODE_MAJOR)
-        note = (music_starting_note + SCALE[record->event.key.col + music_offset] - 3)+12*(MATRIX_ROWS - record->event.key.row);
-      else
-        note = music_starting_note;
-
-      if (record->event.pressed) {
-        music_noteon(note);
-        if (music_sequence_recording) {
-          music_sequence[music_sequence_count] = note;
-          music_sequence_count++;
-        }
-      } else {
-        music_noteoff(note);
-      }
-
-      if (MUSIC_MASK)
-        return false;
-    }
-
     return true;
 }
 

@@ -73,91 +73,6 @@ float voice_envelope(float frequency) {
             }
             break;
 
-        case drums:
-            glissando = false;
-            polyphony_rate = 0;
-                // switch (compensated_index) {
-                //     case 0 ... 10:
-                //         note_timbre = 0.5;
-                //         break;
-                //     case 11 ... 20:
-                //         note_timbre = 0.5 * (21 - compensated_index) / 10;
-                //         break;
-                //     default:
-                //         note_timbre = 0;
-                //         break;
-                // }
-                // frequency = (rand() % (int)(frequency * 1.2 - frequency)) + (frequency * 0.8);
-
-            if (frequency < 80.0) {
-
-            } else if (frequency < 160.0) {
-
-                // Bass drum: 60 - 100 Hz
-                frequency = (rand() % (int)(40)) + 60;
-                switch (envelope_index) {
-                    case 0 ... 10:
-                        note_timbre = 0.5;
-                        break;
-                    case 11 ... 20:
-                        note_timbre = 0.5 * (21 - envelope_index) / 10;
-                        break;
-                    default:
-                        note_timbre = 0;
-                        break;
-                }
-
-            } else if (frequency < 320.0) {
-
-
-                // Snare drum: 1 - 2 KHz
-                frequency = (rand() % (int)(1000)) + 1000;
-                switch (envelope_index) {
-                    case 0 ... 5:
-                        note_timbre = 0.5;
-                        break;
-                    case 6 ... 20:
-                        note_timbre = 0.5 * (21 - envelope_index) / 15;
-                        break;
-                    default:
-                        note_timbre = 0;
-                        break;
-                }
-
-            } else if (frequency < 640.0) {
-
-                // Closed Hi-hat: 3 - 5 KHz
-                frequency = (rand() % (int)(2000)) + 3000;
-                switch (envelope_index) {
-                    case 0 ... 15:
-                        note_timbre = 0.5;
-                        break;
-                    case 16 ... 20:
-                        note_timbre = 0.5 * (21 - envelope_index) / 5;
-                        break;
-                    default:
-                        note_timbre = 0;
-                        break;
-                }
-
-            } else if (frequency < 1280.0) {
-
-                // Open Hi-hat: 3 - 5 KHz
-                frequency = (rand() % (int)(2000)) + 3000;
-                switch (envelope_index) {
-                    case 0 ... 35:
-                        note_timbre = 0.5;
-                        break;
-                    case 36 ... 50:
-                        note_timbre = 0.5 * (51 - envelope_index) / 15;
-                        break;
-                    default:
-                        note_timbre = 0;
-                        break;
-                }
-
-            }
-            break;
         case butts_fader:
             glissando = true;
             polyphony_rate = 0;
@@ -204,22 +119,6 @@ float voice_envelope(float frequency) {
         //         	break;
         //     }
 	       //  break;
-
-        case duty_osc:
-            // This slows the loop down a substantial amount, so higher notes may freeze
-            glissando = true;
-            polyphony_rate = 0;
-            switch (compensated_index) {
-                default:
-                    #define OCS_SPEED 10
-                    #define OCS_AMP   .25
-                    // sine wave is slow
-                    // note_timbre = (sin((float)compensated_index/10000*OCS_SPEED) * OCS_AMP / 2) + .5;
-                    // triangle wave is a bit faster
-                    note_timbre = (float)abs((compensated_index*OCS_SPEED % 3000) - 1500) * ( OCS_AMP / 1500 ) + (1 - OCS_AMP) / 2;
-                	break;
-            }
-	        break;
 
         case duty_octave_down:
             glissando = true;

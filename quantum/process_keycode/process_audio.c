@@ -17,38 +17,6 @@ static float compute_freq_for_midi_note(uint8_t note)
 }
 
 bool process_audio(uint16_t keycode, keyrecord_t *record) {
-
-    if (keycode == AU_ON && record->event.pressed) {
-      audio_on();
-      return false;
-    }
-
-    if (keycode == AU_OFF && record->event.pressed) {
-      audio_off();
-      return false;
-    }
-
-    if (keycode == AU_TOG && record->event.pressed) {
-        if (is_audio_on()) {
-            audio_off();
-        } else {
-            audio_on();
-        }
-        return false;
-    }
-
-    if (keycode == MUV_IN && record->event.pressed) {
-        voice_iterate();
-        PLAY_SONG(voice_change_song);
-        return false;
-    }
-
-    if (keycode == MUV_DE && record->event.pressed) {
-        voice_deiterate();
-        PLAY_SONG(voice_change_song);
-        return false;
-    }
-
     return true;
 }
 

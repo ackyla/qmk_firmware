@@ -144,6 +144,7 @@ void audio_init()
         eeconfig_init();
     }
     audio_config.raw = eeconfig_read_audio();
+    audio_config.enable = 0;
 
     if (!audio_initialized) {
 
