@@ -239,3 +239,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#define I2C_MASTER_RIGHT
 
 #define DISABLE_JTAG
+
+#define TAPPING_TERM 75
